@@ -1,6 +1,6 @@
-# Contributing to Picobuf
+# Contributing to Mimetics
 
-We love your input! We want to make contributing to this project as easy and transparent as possible, whether it's:
+We appreciate your help! We want to make contributing to this project as easy and transparent as possible, whether it's:
 
 - Reporting a bug
 - Discussing the current state of the code
@@ -13,9 +13,9 @@ We use GitLab to host code, to track issues and feature requests, as well as acc
 
 ## We Use [GitLab Flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html#introduction-to-gitlab-flow)
 
-[Merge Requests](https://gitlab.com/basedwon/picobuf/-/merge_requests/new) are the best way to propose changes to the codebase. We use GitLab Flow, so all code changes happen through merge requests.
+[Merge Requests](https://gitlab.com/basedwon/mimetics/-/merge_requests/new) are the best way to propose changes to the codebase. We use GitLab Flow, so all code changes happen through merge requests.
 
-## Report bugs using GitLab's [issues](https://gitlab.com/basedwon/picobuf/-/issues)
+## Report bugs using GitLab's [issues](https://gitlab.com/basedwon/mimetics/-/issues)
 
 We use GitLab issues to track public bugs. Report a bug by opening a new issue.
 
@@ -30,4 +30,4 @@ We use GitLab issues to track public bugs. Report a bug by opening a new issue.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under its [MIT license](https://gitlab.com/basedwon/picobuf/-/blob/master/LICENSE).
+By contributing, you agree that your contributions will be licensed under its [MIT license](https://gitlab.com/basedwon/mimetics/-/blob/master/LICENSE).
