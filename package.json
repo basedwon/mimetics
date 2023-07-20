@@ -1,6 +1,6 @@
 {
   "name": "mimetics",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A library to determine the file type, MIME type, and media type of a given file.",
   "author": "Basedwon <basedwon@protonmail.com>",
   "license": "MIT",
