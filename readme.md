@@ -87,31 +87,25 @@ Read through the [API docs](docs/api.md) for further info.
 
 ## API
 
-Mimetics exports a single class with the following static methods:
+Mimetics exports a single class with the following methods:
 
 - `parse(buffer: Buffer): Object` - Takes in a Buffer and returns an object with the file type (`ext`), MIME type (`mime`), and media type (`media`).
 - `getFileType(buffer: Buffer): string` - Determines the file type from the provided buffer.
 - `getMimeType(extension: string): string` - Returns the MIME type for the provided file extension.
 - `getMediaType(extension: string): string` - Returns the media type for the provided file extension.
 
-
 Mimetics provides a comprehensive API to customize and extend the default behavior:
 
-- **setOptions(opts: Object): Mimetics** - Sets options for the instance, enabling the addition of custom magic numbers, MIME types, file types and edge cases.
-- **addMagicNumber(ext: string, magicNumber: Array<number>): void** - Adds a new magic number to the instance's magicNumbers map.
-- **addMimeType(ext: string, mimeType: string): void** - Adds a new MIME type to the instance's mimeTypeMap.
-- **addFileType(ext: string, regex: RegExp): void** - Adds a new file type to the instance's fileTypeMap.
-- **addEdgeCase(specialExt: string, extList: Array<string>): void** - Adds a new edge case to the instance's edgeCases map.
-
-
-
-
-### Mimetics.parse(buffer)
-
-Takes a buffer as input, identifies the file type, mime type, and media type, and returns an object containing these three properties: `ext`, `mime`, `media`.
+- `setOptions(opts: Object): Mimetics` - Sets options for the instance, enabling the addition of custom magic numbers, MIME types, file types and edge cases.
+- `addMagicNumber(ext: string, magicNumber: Array<number>): void` - Adds a new magic number to the instance's magicNumbers map.
+- `addMimeType(ext: string, mimeType: string): void` - Adds a new MIME type to the instance's mimeTypeMap.
+- `addFileType(ext: string, regex: RegExp): void` - Adds a new file type to the instance's fileTypeMap.
+- `addEdgeCase(specialExt: string, extList: Array<string>): void` - Adds a new edge case to the instance's edgeCases map.
 
 ### `Mimetics.parse(buffer)`
 Parses the input buffer to determine the file type, mime type, and media type.
+
+Takes a buffer as input, identifies the file type, mime type, and media type, and returns an object containing these three properties: `ext`, `mime`, `media`.
 
 #### Parameters
 - `buffer` - Buffer - The input buffer to be parsed.
@@ -120,8 +114,7 @@ Parses the input buffer to determine the file type, mime type, and media type.
 An object containing the determined file type, mime type, and media type.
 
 
-For more detailed API documentation, see the comments in the code.
-
+For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
 
 ## Contributing
 
