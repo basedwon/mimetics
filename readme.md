@@ -49,19 +49,35 @@ const fileInfo = mimetics.parse(buffer)
 console.log(fileInfo) // Logs { ext: 'jpg', mime: 'image/jpeg', media: 'image' }
 ```
 
+**In the Browser**
+
+```js
+const fileInput = document.getElementById('myFileInput')
+fileInput.addEventListener('change', (event) => {
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.onload = (event) => {
+    const arrayBuffer = event.target.result
+    const fileInfo = mimetics(arrayBuffer)
+    console.log(fileInfo)
+  }
+  reader.readAsArrayBuffer(file)
+})
+```
+
 **Adding Custom Magic Numbers**
 
 Here, we're adding a custom magic number for a hypothetical file type and then using Mimetics to analyze a file of that type:
 
 ```js
-const Mimetics = require('mimetics')
+const mimetics = require('mimetics')
 const fs = require('fs')
 
 const buffer = fs.readFileSync('example.custom')
-const mime = new Mimetics({
+const mm = new mimetics({
   magic: { custom: [0x43, 0x55, 0x53, 0x54] }
 })
-const fileInfo = mime.parse(buffer)
+const fileInfo = mm.parse(buffer)
 
 console.log(fileInfo) // Logs { ext: 'custom', mime: 'application/octet-stream', media: 'application' }
 ```
@@ -75,10 +91,10 @@ const Mimetics = require('mimetics')
 const fs = require('fs')
 
 const buffer = fs.readFileSync('example.custom')
-const mime = new Mimetics()
-mime.addMimeType('custom', 'application/x-custom')
+const mm = new Mimetics()
+mm.addMimeType('custom', 'application/x-custom')
 
-const fileInfo = mime.parse(buffer)
+const fileInfo = mm.parse(buffer)
 
 console.log(fileInfo) // Logs { ext: 'custom', mime: 'application/x-custom', media: 'application' }
 ```
@@ -120,7 +136,7 @@ Contributions are welcome. Submit a Pull Request or open an Issue to discuss any
 
 ## Testing
 
-Mimetics includes a test suite built with [Testr](https://npmjs.com/package/@basd/testr).
+Mimetics includes a test suite built with [testr](https://npmjs.com/package/@basd/testr).
 
 To run the test, first clone the respository:
 
