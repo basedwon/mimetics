@@ -12,7 +12,7 @@
 [![Twitter](https://img.shields.io/badge/@basdwon%20-%20?logo=twitter&color=%23383a40)](https://twitter.com/basdwon)
 [![Discord](https://img.shields.io/badge/Basedwon%20-%20?logo=discord&color=%23383a40)](https://discordapp.com/users/basedwon)
 
-Mimetics is determines the file type, MIME type, and media type of a given file using magic numbers and content analysis to detect the most likely file type and then maps that to the appropriate MIME and media type. I've included all of the file types that GPT could think of, but if I'm missing any please submit a pull request.
+Mimetics determines the file type, MIME type, and media type of a given file using magic numbers and content analysis to detect the most likely file type and then maps that to the appropriate MIME and media type. I've included all of the file types that GPT could think of, but if I'm missing any please submit a pull request.
 
 ## Features
 
