@@ -83,8 +83,6 @@ const fileInfo = mime.parse(buffer)
 console.log(fileInfo) // Logs { ext: 'custom', mime: 'application/x-custom', media: 'application' }
 ```
 
-Read through the [API docs](docs/api.md) for further info.
-
 ## API
 
 Mimetics exports a single class with the following methods:
@@ -94,7 +92,7 @@ Mimetics exports a single class with the following methods:
 - `getMimeType(extension: string): string` - Returns the MIME type for the provided file extension.
 - `getMediaType(extension: string): string` - Returns the media type for the provided file extension.
 
-Mimetics provides a comprehensive API to customize and extend the default behavior:
+Mimetics also provides a comprehensive API to customize and extend the default behavior:
 
 - `setOptions(opts: Object): Mimetics` - Sets options for the instance, enabling the addition of custom magic numbers, MIME types, file types and edge cases.
 - `addMagicNumber(ext: string, magicNumber: Array<number>): void` - Adds a new magic number to the instance's magicNumbers map.
@@ -103,7 +101,6 @@ Mimetics provides a comprehensive API to customize and extend the default behavi
 - `addEdgeCase(specialExt: string, extList: Array<string>): void` - Adds a new edge case to the instance's edgeCases map.
 
 ### `Mimetics.parse(buffer)`
-Parses the input buffer to determine the file type, mime type, and media type.
 
 Takes a buffer as input, identifies the file type, mime type, and media type, and returns an object containing these three properties: `ext`, `mime`, `media`.
 
@@ -113,6 +110,7 @@ Takes a buffer as input, identifies the file type, mime type, and media type, an
 #### Returns
 An object containing the determined file type, mime type, and media type.
 
+---
 
 For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
 
