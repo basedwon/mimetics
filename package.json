@@ -15,15 +15,13 @@
   "main": "lib/mimetics.js",
   "scripts": {
     "dev": "nodemon -x npm test",
-    "strip": "remove-comments-regex lib/mimetics-v01.js > docs/mimetics.stripped.js",
     "docs": "jsdoc2md lib/*.js > docs/api.md",
     "test": "testr test/test.js"
   },
   "devDependencies": {
     "@basd/testr": "^0.0.8",
     "jsdoc": "^4.0.2",
-    "jsdoc-to-markdown": "^8.0.0",
-    "remove-comments-regex": "^1.0.1"
+    "jsdoc-to-markdown": "^8.0.0"
   },
   "keywords": [
     "mimetics",
