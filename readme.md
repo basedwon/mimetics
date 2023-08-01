@@ -151,6 +151,20 @@ npm install
 npm test
 ```
 
+## Donations
+
+If you find this project useful and want to help support further development, please send us some coin. We greatly appreciate any and all contributions. Thank you!
+
+**Bitcoin (BTC):**
+```
+1JUb1yNFH6wjGekRUW6Dfgyg4J4h6wKKdF
+```
+
+**Monero (XMR):**
+```
+46uV2fMZT3EWkBrGUgszJCcbqFqEvqrB4bZBJwsbx7yA8e2WBakXzJSUK8aqT4GoqERzbg4oKT2SiPeCgjzVH6VpSQ5y7KQ
+```
+
 ## License
 
 Mimetics is [MIT licensed](./LICENSE).
