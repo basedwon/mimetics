@@ -16,10 +16,11 @@
   "scripts": {
     "dev": "nodemon -x npm test",
     "docs": "jsdoc2md lib/*.js > docs/api.md",
+    "update": "npm i -D @basd/testr@latest",
     "test": "testr test/test.js"
   },
   "devDependencies": {
-    "@basd/testr": "^0.0.8",
+    "@basd/testr": "^0.1.1",
     "jsdoc": "^4.0.2",
     "jsdoc-to-markdown": "^8.0.0"
   },
