@@ -20,7 +20,7 @@
     "test": "testr test/test.js"
   },
   "devDependencies": {
-    "@basd/testr": "^0.1.1",
+    "@basd/testr": "^0.1.2",
     "jsdoc": "^4.0.2",
     "jsdoc-to-markdown": "^8.0.0"
   },
