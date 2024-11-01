@@ -146,9 +146,8 @@ Adds custom file definitions to the existing set.
 - **Parameters**:
   - `definitions` (Array<Object>): Array of custom file definitions to add, with each object containing properties like `tag`, `type`, `ext`, `mime`, `magic`, and `pattern`.
 
----
 
-For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
+- For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
 
 ## Contributing
 
