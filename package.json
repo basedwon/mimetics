@@ -1,7 +1,7 @@
 {
   "name": "mimetics",
   "version": "0.0.8",
-  "description": "A library to determine the file type, MIME type, and media type of a given file.",
+  "description": "Identifies file types based on magic bytes, patterns, and other unique file attributes.",
   "author": "Basedwon <basedwon@protonmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/basedwon/mimetics#readme",
@@ -14,13 +14,17 @@
   },
   "main": "lib/mimetics.js",
   "scripts": {
-    "dev": "nodemon -x npm test",
+    "dev": "nodemon test/tester.js",
+    "dev:test": "nodemon -x npm test",
     "docs": "jsdoc2md lib/*.js > docs/api.md",
     "update": "npm i -D @basd/testr@latest",
     "test": "testr test/test.js"
   },
+  "dependencies": {
+    "jszip": "^3.10.1"
+  },
   "devDependencies": {
-    "@basd/testr": "^0.1.2",
+    "@basd/testr": "^0.1.6",
     "jsdoc": "^4.0.2",
     "jsdoc-to-markdown": "^8.0.0"
   },

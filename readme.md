@@ -12,121 +12,139 @@
 [![Twitter](https://img.shields.io/badge/@basdwon%20-%20?logo=twitter&color=%23383a40)](https://twitter.com/basdwon)
 [![Discord](https://img.shields.io/badge/Basedwon%20-%20?logo=discord&color=%23383a40)](https://discordapp.com/users/basedwon)
 
-Mimetics determines the file type, MIME type, and media type of a given file using magic numbers and content analysis to detect the most likely file type and then maps that to the appropriate MIME and media type. I've included all of the file types that GPT could think of, but if I'm missing any please submit a pull request.
-
-## Features
-
-+ Detects file type using magic numbers
-+ Detects file type using text content analysis
-+ Extracts the MIME and media types
-+ Supports wide variety of file types.
-+ Extendable with user-defined magic numbers, MIME types and file types
+Mimetics identifies file types based on magic bytes, patterns, and other unique file attributes. It provides an intuitive API for both synchronous and asynchronous file type detection, supporting various file formats including text, image, audio, video, and archive types.
 
 ## Installation
 
-```
+To add Mimetics to your project, use:
+
+```bash
 npm install mimetics
 ```
 
 ## Usage
 
-**Basic Usage**
+Mimetics allows you to detect file types from file buffers, file names, and even File objects in browser environments. You can also extend its functionality by adding custom definitions.
 
-Read a file and pass the resulting buffer to Mimetics, which analyzes it to determine its file type, MIME type, and media type:
+### Basic Example
 
-```js
-const mimetics = require('mimetics')
-const fs = require('fs')
-
-const buffer = fs.readFileSync('example.jpg')
-
-// call it as a function:
-const fileInfo = mimetics(buffer)
-
-// or, you can call the `parse` method:
-const fileInfo = mimetics.parse(buffer)
-
-console.log(fileInfo) // Logs { ext: 'jpg', mime: 'image/jpeg', media: 'image' }
-```
-
-**In the Browser**
-
-```js
-const fileInput = document.getElementById('myFileInput')
-fileInput.addEventListener('change', (event) => {
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.onload = (event) => {
-    const arrayBuffer = event.target.result
-    const fileInfo = mimetics(arrayBuffer)
-    console.log(fileInfo)
-  }
-  reader.readAsArrayBuffer(file)
-})
-```
-
-**Adding Custom Magic Numbers**
-
-Here, we're adding a custom magic number for a hypothetical file type and then using Mimetics to analyze a file of that type:
-
-```js
-const mimetics = require('mimetics')
-const fs = require('fs')
-
-const buffer = fs.readFileSync('example.custom')
-const mm = new mimetics({
-  magic: { custom: [0x43, 0x55, 0x53, 0x54] }
-})
-const fileInfo = mm.parse(buffer)
-
-console.log(fileInfo) // Logs { ext: 'custom', mime: 'application/octet-stream', media: 'application' }
-```
-
-**Adding Custom MIME Types**
-
-Here, we're adding a custom MIME type for a specific file extension:
-
-```js
+```javascript
 const Mimetics = require('mimetics')
 const fs = require('fs')
 
-const buffer = fs.readFileSync('example.custom')
-const mm = new Mimetics()
-mm.addMimeType('custom', 'application/x-custom')
+// Load a buffer from a file (e.g., sample.txt)
+const buffer = fs.readFileSync('sample.txt')
+const mimetics = new Mimetics()
 
-const fileInfo = mm.parse(buffer)
+// Synchronous file type detection
+const fileType = mimetics.parse(buffer)
+console.log(fileType) // Output: { tag: 'text', type: 'text', ext: 'txt', mime: 'text/plain' }
 
-console.log(fileInfo) // Logs { ext: 'custom', mime: 'application/x-custom', media: 'application' }
+// Asynchronous file type detection (for ZIP files, etc.)
+mimetics.parseAsync(buffer).then(fileType => {
+  console.log(fileType)
+})
 ```
 
-## API
+### Adding Custom Definitions
 
-Mimetics exports a single class with the following methods:
+You can extend Mimetics with custom definitions for additional file types.
 
-- `parse(buffer: Buffer): Object` - Takes in a Buffer and returns an object with the file type (`ext`), MIME type (`mime`), and media type (`media`).
-- `getFileType(buffer: Buffer): string` - Determines the file type from the provided buffer.
-- `getMimeType(extension: string): string` - Returns the MIME type for the provided file extension.
-- `getMediaType(extension: string): string` - Returns the media type for the provided file extension.
+```javascript
 
-Mimetics also provides a comprehensive API to customize and extend the default behavior:
+const Mimetics = require('mimetics')
 
-- `setOptions(opts: Object): Mimetics` - Sets options for the instance, enabling the addition of custom magic numbers, MIME types, file types and edge cases.
-- `addMagicNumber(ext: string, magicNumber: Array<number>): void` - Adds a new magic number to the instance's magicNumbers map.
-- `addMimeType(ext: string, mimeType: string): void` - Adds a new MIME type to the instance's mimeTypeMap.
-- `addFileType(ext: string, regex: RegExp): void` - Adds a new file type to the instance's fileTypeMap.
-- `addEdgeCase(specialExt: string, extList: Array<string>): void` - Adds a new edge case to the instance's edgeCases map.
+const customDefinitions = [
+  {
+    tag: 'custom',
+    type: 'myfiletype',
+    ext: 'myft',
+    mime: 'application/x-myfiletype',
+    magic: [0x12, 0x34, 0x56],
+    pattern: /^MYFILE/i,
+  }
+]
 
-### `Mimetics.parse(buffer)`
+const mimetics = new Mimetics()
+mimetics.addDefinitions(customDefinitions)
 
-Takes a buffer as input, identifies the file type, mime type, and media type, and returns an object containing these three properties: `ext`, `mime`, `media`.
+const buffer = /* load a buffer for a custom file type */
+const fileType = mimetics.parse(buffer)
+console.log(fileType) // Output should match custom definition
+```
 
-#### Parameters
-- `buffer` - Buffer - The input buffer to be parsed.
+### Browser Example
 
-#### Returns
-An object containing the determined file type, mime type, and media type.
+```javascript
+const Mimetics = require('mimetics')
 
----
+const fileInput = document.querySelector('#fileInput')
+fileInput.addEventListener('change', async (event) => {
+  const file = event.target.files[0]
+  const mimetics = new Mimetics()
+  
+  const fileType = await mimetics.fromFile(file)
+  console.log(fileType) // Output: file type information
+})
+```
+
+## Supported File Types
+
+Mimetics currently supports a variety of formats, including but not limited to:
+
+- **Text**: Plain text (`txt`), Markdown (`md`), LaTeX (`tex`), RTF (`rtf`)
+- **Image**: JPEG (`jpg`, `jpeg`), PNG (`png`), GIF (`gif`), BMP (`bmp`), ICON (`ico`), WebP (`webp`), PDF (`pdf`), SVG (`svg`)
+- **Audio**: MP3 (`mp3`), OGG (`ogg`), WAV (`wav`)
+- **Video**: MP4 (`mp4`), QuickTime (`mov`), AVI (`avi`), MKV (`mkv`), WebM (`webm`), FLV (`flv`)
+- **Archive**: ZIP (`zip`), RAR (`rar`), GZIP (`gz`), 7ZIP (`7z`)
+- **Ebook**: EPUB (`epub`)
+
+## API Reference
+
+### `parse(buffer, name)`
+
+Synchronously parses a buffer to identify the file type.
+
+- **Parameters**:
+  - `buffer` (Uint8Array | ArrayBuffer): The file buffer to parse.
+  - `name` (string, optional): The file name, which can help in detection.
+
+- **Returns**: File type object or `null` if no match is found.
+
+### `parseAsync(buffer, name)`
+
+Asynchronously parses a buffer to identify the file type, with support for ZIP archive analysis.
+
+- **Parameters**:
+  - `buffer` (Uint8Array | ArrayBuffer): The file buffer to parse.
+  - `name` (string, optional): The file name, which can assist in detection.
+
+- **Returns**: A promise resolving to a file type object or `null` if no match is found.
+
+### `fromName(filePath)`
+
+Determines file type based on the file name extension.
+
+- **Parameters**:
+  - `filePath` (string): The file path or name.
+
+- **Returns**: File type object based on the file extension or `null` if no match is found.
+
+### `fromFile(file)`
+
+Asynchronously determines the file type from a File object (for browser use).
+
+- **Parameters**:
+  - `file` (File): File object to analyze.
+
+- **Returns**: A promise resolving to a file type object.
+
+### `addDefinitions(definitions)`
+
+Adds custom file definitions to the existing set.
+
+- **Parameters**:
+  - `definitions` (Array<Object>): Array of custom file definitions to add, with each object containing properties like `tag`, `type`, `ext`, `mime`, `magic`, and `pattern`.
 
 For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
 

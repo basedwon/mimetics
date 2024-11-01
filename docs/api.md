@@ -1,355 +1,269 @@
-## Modules
+## Classes
 
 <dl>
-<dt><a href="#module_Mimetics">Mimetics</a></dt>
-<dd><p>Mimetics - A library to determine the file type, MIME type and media type of a given file.
-This library performs file type detection using magic numbers and text content analysis.
-It also maps file extensions to their MIME types and media types.</p>
-</dd>
-<dt><a href="#module_edgeCases">edgeCases</a> : <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code></dt>
-<dd><p>A map between special file extensions and their normal forms.</p>
-</dd>
-<dt><a href="#module_magicNumbers">magicNumbers</a> : <code>Object.&lt;string, Array.&lt;number&gt;&gt;</code></dt>
-<dd><p>A map of file extensions to magic numbers for binary file type detection.</p>
-</dd>
-<dt><a href="#module_mimeTypeMap">mimeTypeMap</a> : <code>Object.&lt;string, string&gt;</code></dt>
-<dd><p>A map between file extensions and their corresponding MIME types.</p>
-</dd>
-<dt><a href="#module_fileTypeMap">fileTypeMap</a> : <code>Object.&lt;string, RegExp&gt;</code></dt>
-<dd><p>A map between file types and their regular expression patterns for text content.</p>
-</dd>
+<dt><a href="#Mimetics">Mimetics</a></dt>
+<dd></dd>
 </dl>
 
 ## Members
 
 <dl>
-<dt><a href="#BUFFER_CHECK_SIZE">BUFFER_CHECK_SIZE</a> : <code>number</code></dt>
-<dd><p>Size of buffer to check for text content. The first BUFFER_CHECK_SIZE bytes are used to
-check text content for determining file type.</p>
+<dt><a href="#CONSTANTS">CONSTANTS</a> : <code>Object</code></dt>
+<dd><p>Collection of constants used in the Mimetics library.</p>
 </dd>
-<dt><a href="#DEFAULT_FILE_TYPE">DEFAULT_FILE_TYPE</a> : <code>string</code></dt>
-<dd><p>Fallback file type extension if other methods don&#39;t find a match</p>
-</dd>
-<dt><a href="#ERRORS">ERRORS</a> : <code>Object.&lt;string, (string|function())&gt;</code></dt>
+<dt><a href="#ERRORS">ERRORS</a> : <code>Object.&lt;string, string&gt;</code></dt>
 <dd><p>Collection of error messages used in the library.</p>
 </dd>
 </dl>
 
-<a name="module_edgeCases"></a>
-
-## edgeCases : <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
-A map between special file extensions and their normal forms.
-
-<a name="module_magicNumbers"></a>
-
-## magicNumbers : <code>Object.&lt;string, Array.&lt;number&gt;&gt;</code>
-A map of file extensions to magic numbers for binary file type detection.
-
-<a name="module_mimeTypeMap"></a>
-
-## mimeTypeMap : <code>Object.&lt;string, string&gt;</code>
-A map between file extensions and their corresponding MIME types.
-
-<a name="module_Mimetics"></a>
+<a name="Mimetics"></a>
 
 ## Mimetics
-Mimetics - A library to determine the file type, MIME type and media type of a given file.
-This library performs file type detection using magic numbers and text content analysis.
-It also maps file extensions to their MIME types and media types.
+**Kind**: global class  
 
-**Version**: 0.0.1  
-**Author**: Basedwon  
-**License**: MIT  
-**Example**  
-```js
-const Mimetics = require('mimetics')
-const fs = require('fs')
+* [Mimetics](#Mimetics)
+    * [new Mimetics()](#new_Mimetics_new)
+    * [.parse(buffer, name)](#Mimetics+parse) ⇒ <code>Object</code> \| <code>null</code>
+    * [.parseSync(buffer, name)](#Mimetics+parseSync) ⇒ <code>Array.&lt;Object&gt;</code>
+    * [.parseAsync(buffer, name)](#Mimetics+parseAsync) ⇒ <code>Promise.&lt;(Object\|null)&gt;</code>
+    * [.magicMatch(magic, buffer)](#Mimetics+magicMatch) ⇒ <code>boolean</code>
+    * [.detectByMagicNumber(buffer)](#Mimetics+detectByMagicNumber) ⇒ <code>Array.&lt;Object&gt;</code>
+    * [.sortMatches(matches)](#Mimetics+sortMatches) ⇒ <code>Array.&lt;Object&gt;</code>
+    * [.analyzeZipContents(buffer, matches)](#Mimetics+analyzeZipContents) ⇒ <code>Promise.&lt;Array.&lt;Object&gt;&gt;</code>
+    * [.sniffContent(buffer)](#Mimetics+sniffContent) ⇒ <code>Array.&lt;Object&gt;</code>
+    * [.decodeBufferToString(buffer)](#Mimetics+decodeBufferToString) ⇒ <code>string</code>
+    * [.buildResponse(definition)](#Mimetics+buildResponse) ⇒ <code>Object</code> \| <code>null</code>
+    * [.defaultResponse()](#Mimetics+defaultResponse) ⇒ <code>Object</code>
+    * [.validateBuffer(buffer)](#Mimetics+validateBuffer)
+    * [.parseFileName(filePath)](#Mimetics+parseFileName) ⇒ <code>Object</code>
+    * [.fromName(filePath)](#Mimetics+fromName) ⇒ <code>Object</code>
+    * [.getBufferFromFile(file)](#Mimetics+getBufferFromFile) ⇒ <code>Promise.&lt;Uint8Array&gt;</code>
+    * [.fromFile(file)](#Mimetics+fromFile) ⇒ <code>Promise.&lt;Object&gt;</code>
 
-const buffer = fs.readFileSync('example.jpg')
-const fileInfo = Mimetics.parse(buffer)
-console.log(fileInfo) // Logs { ext: 'jpg', mime: 'image/jpeg', media: 'image' }
-```
+<a name="new_Mimetics_new"></a>
 
-* [Mimetics](#module_Mimetics)
-    * [module.exports](#exp_module_Mimetics--module.exports) ⏏
-        * [~Mimetics](#module_Mimetics--module.exports..Mimetics)
-            * [new Mimetics(opts)](#new_module_Mimetics--module.exports..Mimetics_new)
-            * [new Mimetics([opts])](#new_module_Mimetics--module.exports..Mimetics_new)
-        * [~Mimetics](#module_Mimetics--module.exports..Mimetics)
-            * [new Mimetics(opts)](#new_module_Mimetics--module.exports..Mimetics_new)
-            * [new Mimetics([opts])](#new_module_Mimetics--module.exports..Mimetics_new)
-        * [~setOptions(opts)](#module_Mimetics--module.exports..setOptions) ⇒ <code>Mimetics</code>
-        * [~addMagicNumber(ext, magicNumber)](#module_Mimetics--module.exports..addMagicNumber)
-        * [~addMimeType(ext, mimeType)](#module_Mimetics--module.exports..addMimeType)
-        * [~addFileType(ext, regex)](#module_Mimetics--module.exports..addFileType)
-        * [~addEdgeCase(specialExt, extList)](#module_Mimetics--module.exports..addEdgeCase)
-        * [~parse(buffer)](#module_Mimetics--module.exports..parse) ⇒ <code>Object</code>
-        * [~validateBuffer(buffer)](#module_Mimetics--module.exports..validateBuffer)
-        * [~getFileType(buffer)](#module_Mimetics--module.exports..getFileType) ⇒ <code>string</code> \| <code>null</code>
-        * [~getFileTypeFromMagicNumbers(buffer)](#module_Mimetics--module.exports..getFileTypeFromMagicNumbers) ⇒ <code>string</code> \| <code>null</code>
-        * [~getFileTypeFromTextContent(buffer)](#module_Mimetics--module.exports..getFileTypeFromTextContent) ⇒ <code>string</code>
-        * [~decodeBufferToString(buffer)](#module_Mimetics--module.exports..decodeBufferToString) ⇒ <code>string</code>
-        * [~getMimeType(extension)](#module_Mimetics--module.exports..getMimeType) ⇒ <code>string</code>
-        * [~getMediaType(extension)](#module_Mimetics--module.exports..getMediaType) ⇒ <code>string</code>
+### new Mimetics()
+Singleton instance of Mimetics
 
-<a name="exp_module_Mimetics--module.exports"></a>
+**Returns**: [<code>Mimetics</code>](#Mimetics) - - Singleton instance of Mimetics class  
+<a name="Mimetics+parse"></a>
 
-### module.exports ⏏
-Export a Proxy wrapped Mimetics. When the exported object is called as a function, it
-behaves like a Mimetics constructor and `parse` method combination. When a property is accessed,
-it first checks if the property exists on the Mimetics class, and if not, it treats the property as
-a property or method on an instance of the Mimetics class.
+### mimetics.parse(buffer, name) ⇒ <code>Object</code> \| <code>null</code>
+Parses the buffer synchronously and returns the first matching file type.
 
-**Kind**: Exported member  
-<a name="module_Mimetics--module.exports..Mimetics"></a>
-
-#### module.exports~Mimetics
-**Kind**: inner class of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| magicNumbers | <code>Object</code> | Map of file extensions to magic numbers. |
-| mimeTypeMap | <code>Object</code> | Map of file extensions to MIME types. |
-| fileTypeMap | <code>Object</code> | Map of file extensions to regular expression patterns for detecting file types from text content. |
-| edgeCases | <code>Object</code> | Map of special file extensions to lists of normal file extensions. |
-
-
-* [~Mimetics](#module_Mimetics--module.exports..Mimetics)
-    * [new Mimetics(opts)](#new_module_Mimetics--module.exports..Mimetics_new)
-    * [new Mimetics([opts])](#new_module_Mimetics--module.exports..Mimetics_new)
-
-<a name="new_module_Mimetics--module.exports..Mimetics_new"></a>
-
-##### new Mimetics(opts)
-Class for file type and MIME type detection using magic numbers and content analysis.
-
-**Returns**: <code>Mimetics</code> - Returns the Mimetics singleton instance.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Object</code> \| <code>null</code> - - File type object or null if no match found.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opts | <code>Object</code> | The options to customize the detection. The options object can have any of magic, mime, file, and edge properties, which should be a plain object and contain key-value pairs for that respective setting. |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer to parse. |
+| name | <code>string</code> | Optional name of the file. |
 
-<a name="new_module_Mimetics--module.exports..Mimetics_new"></a>
+<a name="Mimetics+parseSync"></a>
 
-##### new Mimetics([opts])
+### mimetics.parseSync(buffer, name) ⇒ <code>Array.&lt;Object&gt;</code>
+Parses the buffer and returns all matching file types.
 
-| Param | Type | Description |
-| --- | --- | --- |
-| [opts] | <code>Object</code> | Optional initial configuration for the Mimetics instance. |
-
-<a name="module_Mimetics--module.exports..Mimetics"></a>
-
-#### module.exports~Mimetics
-**Kind**: inner class of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-
-* [~Mimetics](#module_Mimetics--module.exports..Mimetics)
-    * [new Mimetics(opts)](#new_module_Mimetics--module.exports..Mimetics_new)
-    * [new Mimetics([opts])](#new_module_Mimetics--module.exports..Mimetics_new)
-
-<a name="new_module_Mimetics--module.exports..Mimetics_new"></a>
-
-##### new Mimetics(opts)
-Class for file type and MIME type detection using magic numbers and content analysis.
-
-**Returns**: <code>Mimetics</code> - Returns the Mimetics singleton instance.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Array.&lt;Object&gt;</code> - - List of matching file types.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opts | <code>Object</code> | The options to customize the detection. The options object can have any of magic, mime, file, and edge properties, which should be a plain object and contain key-value pairs for that respective setting. |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer to parse. |
+| name | <code>string</code> | Optional name of the file. |
 
-<a name="new_module_Mimetics--module.exports..Mimetics_new"></a>
+<a name="Mimetics+parseAsync"></a>
 
-##### new Mimetics([opts])
+### mimetics.parseAsync(buffer, name) ⇒ <code>Promise.&lt;(Object\|null)&gt;</code>
+Parses the buffer asynchronously, analyzing ZIP contents if necessary.
 
-| Param | Type | Description |
-| --- | --- | --- |
-| [opts] | <code>Object</code> | Optional initial configuration for the Mimetics instance. |
-
-<a name="module_Mimetics--module.exports..setOptions"></a>
-
-#### module.exports~setOptions(opts) ⇒ <code>Mimetics</code>
-Sets options for the instance, enabling the addition of custom magic numbers, MIME types, file types and edge cases.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>Mimetics</code> - Returns the Mimetics instance.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Promise.&lt;(Object\|null)&gt;</code> - - Promise resolving to the matching file type or null.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opts | <code>Object</code> | The options to set. The options object can have any of magic, mime, file, and edge properties, which should be a plain object and contain key-value pairs for that respective setting. |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer to parse. |
+| name | <code>string</code> | Optional name of the file. |
 
-<a name="module_Mimetics--module.exports..addMagicNumber"></a>
+<a name="Mimetics+magicMatch"></a>
 
-#### module.exports~addMagicNumber(ext, magicNumber)
-Adds a new magic number to the instance's magicNumbers map.
+### mimetics.magicMatch(magic, buffer) ⇒ <code>boolean</code>
+Matches a buffer against a specified magic byte sequence.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ext | <code>string</code> | The file extension. |
-| magicNumber | <code>Array.&lt;number&gt;</code> | The magic number. |
-
-<a name="module_Mimetics--module.exports..addMimeType"></a>
-
-#### module.exports~addMimeType(ext, mimeType)
-Adds a new MIME type to the instance's mimeTypeMap.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>boolean</code> - - True if magic bytes match, otherwise false.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ext | <code>string</code> | The file extension. |
-| mimeType | <code>string</code> | The MIME type. |
+| magic | <code>Array.&lt;number&gt;</code> \| <code>Array.&lt;Array.&lt;number&gt;&gt;</code> | Expected magic byte(s). |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer to match against. |
 
-<a name="module_Mimetics--module.exports..addFileType"></a>
+<a name="Mimetics+detectByMagicNumber"></a>
 
-#### module.exports~addFileType(ext, regex)
-Adds a new file type to the instance's fileTypeMap.
+### mimetics.detectByMagicNumber(buffer) ⇒ <code>Array.&lt;Object&gt;</code>
+Detects file type based on magic numbers within the buffer.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ext | <code>string</code> | The file extension. |
-| regex | <code>RegExp</code> | The regular expression pattern for the file type. |
-
-<a name="module_Mimetics--module.exports..addEdgeCase"></a>
-
-#### module.exports~addEdgeCase(specialExt, extList)
-Adds a new edge case to the instance's edgeCases map.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Array.&lt;Object&gt;</code> - - Array of matching file definitions with scores.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| specialExt | <code>string</code> | The special file extension. |
-| extList | <code>Array.&lt;string&gt;</code> | The list of normal file extensions. |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer. |
 
-<a name="module_Mimetics--module.exports..parse"></a>
+<a name="Mimetics+sortMatches"></a>
 
-#### module.exports~parse(buffer) ⇒ <code>Object</code>
-Parses a buffer and returns an object containing the file type, MIME type, and media type.
+### mimetics.sortMatches(matches) ⇒ <code>Array.&lt;Object&gt;</code>
+Sorts matches by their score in descending order.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>Object</code> - Returns an object containing `ext`, `mime`, and `media`.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Array.&lt;Object&gt;</code> - - Sorted matches.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer to parse. |
+| matches | <code>Array.&lt;Object&gt;</code> | List of matches to sort. |
 
-<a name="module_Mimetics--module.exports..validateBuffer"></a>
+<a name="Mimetics+analyzeZipContents"></a>
 
-#### module.exports~validateBuffer(buffer)
-Validates a buffer.
+### mimetics.analyzeZipContents(buffer, matches) ⇒ <code>Promise.&lt;Array.&lt;Object&gt;&gt;</code>
+Analyzes ZIP contents for matching definitions based on required internal files.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Promise.&lt;Array.&lt;Object&gt;&gt;</code> - - Array of verified matches with updated scores.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The ZIP file buffer. |
+| matches | <code>Array.&lt;Object&gt;</code> | List of initial matches to verify. |
+
+<a name="Mimetics+sniffContent"></a>
+
+### mimetics.sniffContent(buffer) ⇒ <code>Array.&lt;Object&gt;</code>
+Attempts to match file type based on content patterns.
+
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Array.&lt;Object&gt;</code> - - Array of file type definitions that match by content pattern.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer. |
+
+<a name="Mimetics+decodeBufferToString"></a>
+
+### mimetics.decodeBufferToString(buffer) ⇒ <code>string</code>
+Decodes a buffer into a string for pattern matching.
+
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>string</code> - - Decoded string content.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The file buffer. |
+
+<a name="Mimetics+buildResponse"></a>
+
+### mimetics.buildResponse(definition) ⇒ <code>Object</code> \| <code>null</code>
+Constructs a response object based on a file type definition.
+
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Object</code> \| <code>null</code> - - Constructed response object, or null if no definition provided.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| definition | <code>Object</code> | The file type definition. |
+
+<a name="Mimetics+defaultResponse"></a>
+
+### mimetics.defaultResponse() ⇒ <code>Object</code>
+Returns a default response, typically for unknown or generic text file types.
+
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Object</code> - - Default response object.  
+<a name="Mimetics+validateBuffer"></a>
+
+### mimetics.validateBuffer(buffer)
+Validates the provided buffer to ensure it’s a valid file buffer.
+
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
 **Throws**:
 
-- Will throw an error if the buffer is invalid.
+- <code>Error</code> - Throws if buffer is invalid.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer to validate. |
 
-<a name="module_Mimetics--module.exports..getFileType"></a>
+<a name="Mimetics+parseFileName"></a>
 
-#### module.exports~getFileType(buffer) ⇒ <code>string</code> \| <code>null</code>
-Gets the file type of a buffer.
+### mimetics.parseFileName(filePath) ⇒ <code>Object</code>
+Parses a file name to extract metadata like extension and slug.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> \| <code>null</code> - Returns the file type or null.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer. |
-
-<a name="module_Mimetics--module.exports..getFileTypeFromMagicNumbers"></a>
-
-#### module.exports~getFileTypeFromMagicNumbers(buffer) ⇒ <code>string</code> \| <code>null</code>
-Gets the file type of a buffer using magic numbers.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> \| <code>null</code> - Returns the file type or null.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Object</code> - - Object with parsed name, slug, path, and extension.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer. |
+| filePath | <code>string</code> | Path or name of the file. |
 
-<a name="module_Mimetics--module.exports..getFileTypeFromTextContent"></a>
+<a name="Mimetics+fromName"></a>
 
-#### module.exports~getFileTypeFromTextContent(buffer) ⇒ <code>string</code>
-Gets the file type of a buffer using its text content.
+### mimetics.fromName(filePath) ⇒ <code>Object</code>
+Determines file type from file name extension.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> - Returns the file type.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer. |
-
-<a name="module_Mimetics--module.exports..decodeBufferToString"></a>
-
-#### module.exports~decodeBufferToString(buffer) ⇒ <code>string</code>
-Decodes a buffer to a string.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> - Returns the decoded string.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Object</code> - - File type definition or default response if not found.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| buffer | <code>Uint8Array</code> \| <code>ArrayBuffer</code> | The buffer. |
+| filePath | <code>string</code> | Path or name of the file. |
 
-<a name="module_Mimetics--module.exports..getMimeType"></a>
+<a name="Mimetics+getBufferFromFile"></a>
 
-#### module.exports~getMimeType(extension) ⇒ <code>string</code>
-Gets the MIME type of a file extension.
+### mimetics.getBufferFromFile(file) ⇒ <code>Promise.&lt;Uint8Array&gt;</code>
+Converts a file to a buffer asynchronously.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> - Returns the MIME type.  
-**Throws**:
-
-- Will throw an error if the extension is invalid or unrecognized.
-
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Promise.&lt;Uint8Array&gt;</code> - - Promise resolving to the file buffer.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| extension | <code>string</code> | The file extension. |
+| file | <code>File</code> | The file object to read. |
 
-<a name="module_Mimetics--module.exports..getMediaType"></a>
+<a name="Mimetics+fromFile"></a>
 
-#### module.exports~getMediaType(extension) ⇒ <code>string</code>
-Gets the media type of a file extension.
+### mimetics.fromFile(file) ⇒ <code>Promise.&lt;Object&gt;</code>
+Determines file type from a file object by reading its buffer and name.
 
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_Mimetics--module.exports)  
-**Returns**: <code>string</code> - Returns the media type.  
+**Kind**: instance method of [<code>Mimetics</code>](#Mimetics)  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - - Promise resolving to file type definition or null if not found.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| extension | <code>string</code> | The file extension. |
+| file | <code>File</code> | The file object to analyze. |
 
-<a name="module_fileTypeMap"></a>
+<a name="CONSTANTS"></a>
 
-## fileTypeMap : <code>Object.&lt;string, RegExp&gt;</code>
-A map between file types and their regular expression patterns for text content.
-
-<a name="BUFFER_CHECK_SIZE"></a>
-
-## BUFFER\_CHECK\_SIZE : <code>number</code>
-Size of buffer to check for text content. The first BUFFER_CHECK_SIZE bytes are used to
-check text content for determining file type.
+## CONSTANTS : <code>Object</code>
+Collection of constants used in the Mimetics library.
 
 **Kind**: global variable  
-<a name="DEFAULT_FILE_TYPE"></a>
+**Properties**
 
-## DEFAULT\_FILE\_TYPE : <code>string</code>
-Fallback file type extension if other methods don't find a match
+| Name | Type | Description |
+| --- | --- | --- |
+| BUFFER_CHECK_SIZE | <code>number</code> | Number of bytes to check in a buffer for type detection. |
+| MAGIC_NUMBER_SCORE | <code>number</code> | Score assigned to a file type when a magic number match is found. |
+| ZIP_HEADER_SCORE | <code>number</code> | Additional score given to ZIP files that contain specific internal files. |
 
-**Kind**: global variable  
 <a name="ERRORS"></a>
 
-## ERRORS : <code>Object.&lt;string, (string\|function())&gt;</code>
+## ERRORS : <code>Object.&lt;string, string&gt;</code>
 Collection of error messages used in the library.
 
 **Kind**: global variable  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| INVALID_BUFFER | <code>string</code> | Error message for invalid buffer input. |
+

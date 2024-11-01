@@ -1,123 +1,134 @@
 const fs = require('fs')
 const path = require('path')
-const { ERRORS, DEFAULT_FILE_TYPE } = require('../lib/const')
 const Mimetics = require('../lib/mimetics')
-const fixture = file => path.resolve(__dirname, 'fixtures', file)
 
 describe('Mimetics', () => {
-  describe('parse', () => {
-    it('should correctly identify the file type, mime type, and media type', () => {
-      const buffer = fs.readFileSync(fixture('image.jpeg'))
-      const result = Mimetics.parse(buffer)
-      expect(result).to.deep.equal({ ext: 'jpg', mime: 'image/jpeg', media: 'image' })
-    })
-    it('should throw an error for invalid buffer', () => {
-      expect(() => Mimetics.parse('not a buffer')).to.throw(Error, ERRORS.INVALID_BUFFER)
+  const fixturesDir = path.join(__dirname, 'fixtures')
+
+  const asyncFiles = [
+    { filename: 'powerpoint.pptx',
+      expected: { tag: 'office', type: 'powerpoint', ext: 'pptx', 
+        mime: 'application/vnd.openxmlformats-officedocument' }},
+    { filename: 'spreadsheet.xlsx',
+      expected: { tag: 'office', type: 'excel', ext: 'xlsx', 
+        mime: 'application/vnd.openxmlformats-officedocument' }},
+    { filename: 'word-doc.docx',
+      expected: { tag: 'office', type: 'word', ext: 'docx', 
+        mime: 'application/vnd.openxmlformats-officedocument' }},
+  ]
+
+  const testFiles = [
+    { filename: 'code.js',
+      expected: { tag: 'code', type: 'javascript', ext: 'js', mime: 'application/javascript' } },
+    { filename: 'compressed.zip',
+      expected: { tag: 'compressed', type: 'zip', ext: 'zip', mime: 'application/zip' } },
+    { filename: 'epub.epub',
+      expected: { tag: 'compressed', type: 'zip', ext: 'zip', mime: 'application/zip' } },
+    { filename: 'image.gif',
+      expected: { tag: 'image', type: 'gif89a', ext: 'gif', mime: 'image/gif' } },
+    { filename: 'image.jpeg',
+      expected: { tag: 'image', type: 'jpeg', ext: 'jpg', mime: 'image/jpeg' } },
+    { filename: 'image.png',
+      expected: { tag: 'image', type: 'png', ext: 'png', mime: 'image/png' } },
+    { filename: 'PDF.pdf',
+      expected: { tag: 'image', type: 'pdf', ext: 'pdf', mime: 'application/pdf' } },
+    { filename: 'RTF.rtf',
+      expected: { tag: 'text', type: 'rtf', ext: 'rtf', mime: 'application/rtf' } },
+    { filename: 'txt.txt',
+      expected: { tag: 'text', type: 'text', ext: 'txt', mime: 'text/plain' } },
+    { filename: 'unknown',
+      expected: { tag: 'text', type: 'text', ext: 'txt', mime: 'text/plain' } },
+    { filename: 'music.wav',
+      expected: { tag: 'audio', type: 'wav', ext: 'wav', mime: 'audio/wav' } },
+    { filename: 'music.mp3',
+      expected: { tag: 'audio', type: 'mp3', ext: 'mp3', mime: 'audio/mpeg' } },
+  ]
+  
+  describe('parse()', () => {
+    testFiles.forEach(({ filename, expected }) => {
+      it(`should correctly identify ${filename} synchronously`, () => {
+        const filePath = path.join(fixturesDir, filename)
+        const buffer = fs.readFileSync(filePath)
+        
+        const result = Mimetics.parse(buffer)
+        
+        if (expected) {
+          expect(result).to.be.an('object')
+          expect(result.tag).to.equal(expected.tag)
+          expect(result.type).to.equal(expected.type)
+          if (Array.isArray(result.ext)) expect(result.ext).to.include(expected.ext)
+          else expect(result.ext).to.equal(expected.ext)
+          expect(result.mime).to.equal(expected.mime)
+        } else {
+          expect(result).to.be.null
+        }
+      })
     })
   })
 
-  describe('getMediaType', () => {
-    it('should return correct media type for a given extension', () => {
-      expect(Mimetics.getMediaType('html')).to.equal('text')
+  describe('parseAsync()', () => {
+    testFiles.concat(asyncFiles).forEach(({ filename, expected }) => {
+      it(`should correctly identify ${filename}`, async () => {
+        const filePath = path.join(fixturesDir, filename)
+        const buffer = fs.readFileSync(filePath)
+        const result = await Mimetics.parseAsync(buffer)
+        if (expected) {
+          expect(result).to.be.an('object')
+          expect(result.tag).to.equal(expected.tag)
+          expect(result.type).to.equal(expected.type)
+          if (Array.isArray(result.ext)) expect(result.ext).to.include(expected.ext)
+          else expect(result.ext).to.equal(expected.ext)
+          expect(result.mime).to.equal(expected.mime)
+        } else {
+          expect(result).to.be.null
+        }
+      })
     })
   })
 
-  describe('getFileType', () => {
-    it('should correctly identify the file type from binary content', () => {
-      const buffer = fs.readFileSync(fixture('image.jpeg'))
-      const fileType = Mimetics.getFileType(buffer)
-      expect(fileType).to.equal('jpg')
-    })
-
-    it('should correctly identify the file type from text content', () => {
-      const buffer = fs.readFileSync(fixture('code.js'))
-      const fileType = Mimetics.getFileType(buffer)
-      expect(fileType).to.equal('js')
-    })
-  })
-
-  describe('getFileTypeFromMagicNumbers', () => {
-    it('should correctly identify the file type from binary content', () => {
-      const buffer = fs.readFileSync(fixture('image.jpeg'))
-      const fileType = Mimetics.getFileTypeFromMagicNumbers(buffer)
-      expect(fileType).to.equal('jpg')
-    })
-
-    it('should return null if the file type could not be identified from binary content', () => {
-      const buffer = Buffer.from('unrecognizable content')
-      const fileType = Mimetics.getFileTypeFromMagicNumbers(buffer)
-      expect(fileType).to.be.null
+  describe('fromName()', () => {
+    testFiles.concat(asyncFiles).forEach(({ filename, expected }) => {
+      it(`should identify file type from name: ${filename}`, () => {
+        const filePath = path.join(fixturesDir, filename)
+        
+        const result = Mimetics.fromName(filePath)
+        
+        if (expected) {
+          expect(result).to.be.an('object')
+          expect(result.tag).to.equal(expected.tag)
+          if (Array.isArray(result.ext)) expect(result.ext).to.include(expected.ext)
+          else expect(result.ext).to.equal(expected.ext)
+          expect(result.mime).to.equal(expected.mime)
+        } else {
+          expect(result).to.be.null
+        }
+      })
     })
   })
 
-  describe('getFileTypeFromTextContent', () => {
-    it('should correctly identify the file type from text content', () => {
-      const buffer = fs.readFileSync(fixture('code.js'))
-      const fileType = Mimetics.getFileTypeFromTextContent(buffer)
-      expect(fileType).to.equal('js')
-    })
+  if (typeof window !== 'undefined') {
+    describe('fromFile()', () => {
+      testFiles.forEach(({ filename, expected }) => {
+        it(`should correctly identify ${filename} using fromFile()`, async () => {
+          const filePath = path.join(fixturesDir, filename)
+          const fileBuffer = fs.readFileSync(filePath)
+          const mockFile = new Blob([fileBuffer], { type: expected ? expected.mime : 'application/octet-stream' })
+          mockFile.name = filename
 
-    it(`should return "${DEFAULT_FILE_TYPE}" if file type couldn't be identified from text content`, () => {
-      const buffer = Buffer.from('unrecognizable content')
-      const fileType = Mimetics.getFileTypeFromTextContent(buffer)
-      expect(fileType).to.equal(DEFAULT_FILE_TYPE)
-    })
-  })
+          const result = await Mimetics.fromFile(mockFile)
 
-  describe('validateBuffer', () => {
-    it('should throw an error when a non-Buffer argument is provided', () => {
-      expect(() => Mimetics.validateBuffer('string')).to.throw(ERRORS.INVALID_BUFFER)
-      expect(() => Mimetics.validateBuffer(123)).to.throw(ERRORS.INVALID_BUFFER)
-      expect(() => Mimetics.validateBuffer(null)).to.throw(ERRORS.INVALID_BUFFER)
-      expect(() => Mimetics.validateBuffer(undefined)).to.throw(ERRORS.INVALID_BUFFER)
-      expect(() => Mimetics.validateBuffer({})).to.throw(ERRORS.INVALID_BUFFER)
+          if (expected) {
+            expect(result).to.be.an('object')
+            expect(result.tag).to.equal(expected.tag)
+            expect(result.type).to.equal(expected.type)
+            if (Array.isArray(result.ext)) expect(result.ext).to.include(expected.ext)
+            else expect(result.ext).to.equal(expected.ext)
+            expect(result.mime).to.equal(expected.mime)
+          } else {
+            expect(result).to.be.null
+          }
+        })
+      })
     })
-    it('should not throw an error when a Buffer argument is provided', () => {
-      expect(() => Mimetics.validateBuffer(Buffer.from(''))).to.not.throw()
-    })
-  })
-
-  describe('getMimeType', () => {
-    it('should return correct MIME type for a given extension', () => {
-      expect(Mimetics.getMimeType('html')).to.equal('text/html')
-    })
-
-    it('should throw an error for invalid extension', () => {
-      expect(() => Mimetics.getMimeType(123)).to.throw(Error, ERRORS.INVALID_EXTENSION)
-    })
-
-    it('should throw an error for unrecognized extension', () => {
-      expect(() => Mimetics.getMimeType('xyz')).to.throw(Error, ERRORS.UNRECOGNIZED_EXTENSION('xyz'))
-    })
-
-    it('should throw an error when a non-string argument is provided', () => {
-      expect(() => Mimetics.getMimeType(Buffer.from(''))).to.throw(ERRORS.INVALID_EXTENSION)
-      expect(() => Mimetics.getMimeType(123)).to.throw(ERRORS.INVALID_EXTENSION)
-      expect(() => Mimetics.getMimeType(null)).to.throw(ERRORS.INVALID_EXTENSION)
-      expect(() => Mimetics.getMimeType(undefined)).to.throw(ERRORS.INVALID_EXTENSION)
-      expect(() => Mimetics.getMimeType({})).to.throw(ERRORS.INVALID_EXTENSION)
-    })
-
-    it('should throw an error when an unrecognized extension is provided', () => {
-      expect(() => Mimetics.getMimeType('unrecognized'))
-        .to.throw(ERRORS.UNRECOGNIZED_EXTENSION('unrecognized'))
-    })
-
-    it('should not throw an error when a recognized string extension is provided', () => {
-      expect(() => Mimetics.getMimeType('jpg')).to.not.throw()
-    })
-  })
-
-  describe('edge cases', () => {
-    it('should correctly handle png file extensions', () => {
-      const buffer = fs.readFileSync(fixture('image.png'))
-      const result = Mimetics.parse(buffer)
-      expect(result.ext).to.equal('png')
-    })
-    it('should correctly handle errors with edge cases', () => {
-      const buffer = fs.readFileSync(fixture('unknown'))
-      // log(Mimetics.parse(buffer))
-      // expect(() => Mimetics.parse(buffer)).to.throw(ERRORS.UNRECOGNIZED_EXTENSION('jpg'))
-    })
-  })
+  }
 })
