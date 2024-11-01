@@ -148,6 +148,9 @@ Adds custom file definitions to the existing set.
 
 
 
+
+
+
 For more detailed API documentation, see the [API reference](docs/api.md) and the comments in the code.
 
 ## Contributing
