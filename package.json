@@ -13,6 +13,7 @@
     "url": "https://github.com/basedwon/mimetics/issues"
   },
   "main": "lib/mimetics.js",
+  "types": "types.d.ts",
   "scripts": {
     "dev": "nodemon test/tester.js",
     "dev:test": "nodemon -x npm test",
