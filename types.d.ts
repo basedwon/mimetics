@@ -22,12 +22,12 @@ declare module "mimetics" {
     constructor(
       customDefinitions?: FileType[],
       scoringValues?: {
-        magic: number;
-        content: number;
-        fileExtension: number;
-        zipHeader: number;
+        magic: number
+        content: number
+        fileExtension: number
+        zipHeader: number
       }
-    );
+    )
 
     /**
      * Synchronously parses a buffer to identify the file type.
@@ -35,7 +35,7 @@ declare module "mimetics" {
      * @param name - Optional file name, useful for detection.
      * @returns A file type object or null if no match is found.
      */
-    parse(buffer: Uint8Array | ArrayBuffer, name?: string): FileType | null;
+    parse(buffer: Uint8Array | ArrayBuffer, name?: string): FileType | null
 
     /**
      * Synchronously parses a buffer and returns all matching file types.
@@ -43,7 +43,7 @@ declare module "mimetics" {
      * @param name - Optional file name, useful for detection.
      * @returns Array of matching file types.
      */
-    parseSync(buffer: Uint8Array | ArrayBuffer, name?: string): FileType[];
+    parseSync(buffer: Uint8Array | ArrayBuffer, name?: string): FileType[]
 
     /**
      * Asynchronously parses a buffer to identify the file type, with support for ZIP analysis.
@@ -54,58 +54,58 @@ declare module "mimetics" {
     parseAsync(
       buffer: Uint8Array | ArrayBuffer,
       name?: string
-    ): Promise<FileType | null>;
+    ): Promise<FileType | null>
 
     /**
      * Determines file type from a file name extension.
      * @param filePath - Path or name of the file.
      * @returns File type object based on the extension or null if not found.
      */
-    fromName(filePath: string): FileType | null;
+    fromName(filePath: string): FileType | null
 
     /**
      * Asynchronously determines file type from a File object in a browser environment.
      * @param file - The file object to analyze.
      * @returns A promise resolving to a file type object.
      */
-    fromFile(file: File): Promise<FileType | null>;
+    fromFile(file: File): Promise<FileType | null>
 
     /**
      * Adds custom file definitions.
      * @param {FileType | Array<FileType>} definitions - Array of custom definitions to add.
      */
-    addDefinitions(definitions: FileType | FileType[]): void;
+    addDefinitions(definitions: FileType | FileType[]): void
   }
 
   /**
    * File type definition object.
    */
   type FileType = {
-    id?: symbol;
-    tag: string;
-    ext: string | string[];
-    type: string;
-    magic: number[] | number[][] | null;
-    pattern: RegExp | null;
-    mime: string;
-    zipped?: boolean | string[];
-  };
+    id?: symbol
+    tag: string
+    ext: string | string[]
+    type: string
+    magic: number[] | number[][] | null
+    pattern: RegExp | null
+    mime: string
+    zipped?: boolean | string[]
+  }
 
   /**
    * CONSTANTS used in Mimetics library.
    */
   export const CONSTANTS: {
-    BUFFER_CHECK_SIZE: number;
-    MAGIC_NUMBER_SCORE: number;
-    ZIP_HEADER_SCORE: number;
-  };
+    BUFFER_CHECK_SIZE: number
+    MAGIC_NUMBER_SCORE: number
+    ZIP_HEADER_SCORE: number
+  }
 
   /**
    * Error messages used in the Mimetics library.
    */
   export const ERRORS: {
-    INVALID_BUFFER: string;
-  };
+    INVALID_BUFFER: string
+  }
 
-  export default Mimetics;
+  export default Mimetics
 }
