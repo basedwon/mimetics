@@ -1,6 +1,6 @@
 {
   "name": "mimetics",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Identifies file types based on magic bytes, patterns, and other unique file attributes.",
   "author": "Basedwon <basedwon@protonmail.com>",
   "license": "MIT",
