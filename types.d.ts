@@ -42,6 +42,12 @@ declare module 'mimetics' {
      * @returns A promise resolving to a file type object.
      */
     fromFile(file: File): Promise<FileType | null>
+
+    /**
+    * Adds custom file definitions.
+    * @param {FileType | Array<FileType>} definitions - Array of custom definitions to add.
+    */
+    addDefinitions(definitions: FileType | FileType[]): void
   }
 
   /**
@@ -74,5 +80,5 @@ declare module 'mimetics' {
     INVALID_BUFFER: string
   }
 
-  export = Mimetics
+  export default Mimetics
 }
