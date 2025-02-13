@@ -1,10 +1,38 @@
 declare module 'mimetics' {
   /**
+   * File type definition object.
+   */
+  interface FileType {
+    tag: string
+    type: string
+    ext: string | string[]
+    mime: string
+    score?: number
+    pattern?: RegExp
+    zipped?: boolean | string[]
+    magic?: number[] | number[][]
+  }
+
+  /**
+   * CONSTANTS used in Mimetics library.
+   */
+  export const CONSTANTS: {
+    BUFFER_CHECK_SIZE: number
+    MAGIC_NUMBER_SCORE: number
+    ZIP_HEADER_SCORE: number
+  }
+
+  /**
+   * Error messages used in the Mimetics library.
+   */
+  export const ERRORS: {
+    INVALID_BUFFER: string
+  }
+
+  /**
    * Mimetics class for detecting file types based on magic bytes, patterns, and other properties.
    */
   class Mimetics {
-    constructor()
-
     /**
      * Synchronously parses a buffer to identify the file type.
      * @param buffer - The file buffer to parse.
@@ -44,41 +72,16 @@ declare module 'mimetics' {
     fromFile(file: File): Promise<FileType | null>
 
     /**
-    * Adds custom file definitions.
-    * @param {FileType | Array<FileType>} definitions - Array of custom definitions to add.
-    */
+     * Adds custom file definitions.
+     * @param definitions - Array of custom definitions to add.
+     */
     addDefinitions(definitions: FileType | FileType[]): void
   }
 
   /**
-   * File type definition object.
+   * The singleton instance of Mimetics.
    */
-  interface FileType {
-    tag: string
-    type: string
-    ext: string | string[]
-    mime: string
-    score?: number
-    pattern?: RegExp
-    zipped?: boolean | string[]
-    magic?: number[] | number[][]
-  }
+  declare const mimetics: Mimetics
 
-  /**
-   * CONSTANTS used in Mimetics library.
-   */
-  export const CONSTANTS: {
-    BUFFER_CHECK_SIZE: number
-    MAGIC_NUMBER_SCORE: number
-    ZIP_HEADER_SCORE: number
-  }
-
-  /**
-   * Error messages used in the Mimetics library.
-   */
-  export const ERRORS: {
-    INVALID_BUFFER: string
-  }
-
-  export default Mimetics
+  export default mimetics
 }
