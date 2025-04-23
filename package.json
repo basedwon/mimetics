@@ -26,7 +26,8 @@
     "test": "testr test/test.js"
   },
   "dependencies": {
-    "jszip": "^3.10.1"
+    "jszip": "^3.10.1",
+    "lodash.findlast": "^4.6.0"
   },
   "devDependencies": {
     "@basd/testr": "^0.1.6",
