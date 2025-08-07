@@ -10,10 +10,11 @@ async function test() {
   const mm = new Mimetics()
 
   // fileName = 'image.jpeg'
+  fileName = 'webp.webp'
   // fileName = 'RTF.rtf'
   // fileName = 'image.png'
   // fileName = 'code.js'
-  fileName = 'compressed.zip'
+  // fileName = 'compressed.zip'
   // fileName = 'word-doc.docx'
   // fileName = 'word-doc.docx'
   // fileName = 'PDF.pdf'
@@ -31,11 +32,12 @@ async function test() {
   // log({ obj })
   // const buffer = fs.readFileSync(obj.path)
 
+  log({ filePath })
   const buffer = fs.readFileSync(filePath)
   // res = mm.parse(buffer)
-  // res = Mimetics.parseSync(buffer)
+  res = Mimetics.parseSync(buffer)
   // // res = mm.parseSync(buffer)
-  res = await Mimetics.parseAsync(buffer)
+  // res = await Mimetics.parseAsync(buffer)
   // // res = await mm.parseAsync(buffer)
   log({ res })
 
